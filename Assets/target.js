@@ -2,7 +2,8 @@
 
 private var exploded = false;
 private var explosionSpeed = 50.0;
-private var aliveTime = 25.0;
+private var aliveTime = 5.0;
+private var speedAccelerator = 100.0;
 
 function Start () {
 
@@ -11,6 +12,7 @@ function Start () {
 function Update () {
 	if (exploded) {
 		transform.position += -transform.forward * explosionSpeed * Time.deltaTime;
+		explosionSpeed += speedAccelerator * Time.deltaTime;
 		aliveTime -= Time.deltaTime;
 		if (aliveTime < 0) {
 			Destroy(gameObject);
@@ -22,10 +24,7 @@ function OnTriggerEnter(other : Collider) {
 	if (other.gameObject.CompareTag("Bullet")) {
 		Destroy(other.gameObject);
 		
-		
-		//Debug.Log(parent.gameObject.transforms);
-		
-	    for (var child : Transform in this.transform.parent.transform) {
+	    for (var child : Transform in transform.parent.transform) {
 	    	Destroy(child.GetComponent(core));
 			var childTarget = child.GetComponent(target);
 			if (!childTarget.exploded) {
